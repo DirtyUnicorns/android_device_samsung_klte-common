@@ -2,21 +2,21 @@
   {
     "repository": "DirtyUnicorns/android_device_samsung_msm8974-common",
     "target_path": "device/samsung/msm8974-common"
-    "branch":   "lollipop"
+    "branch":   "lollipop-caf"
   }, 
   {
     "repository": "DirtyUnicorns/android_kernel_samsung_klte",
     "target_path": "kernel/samsung/klte"
-    "branch":   "lollipop"
+    "branch":   "lollipop-caf"
   },
   {
     "repository": "DirtyUnicorns/android_device_samsung_qcom-common",
     "target_path": "device/samsung/qcom-common"
-    "branch":   "lollipop"
+    "branch":   "lollipop-caf"
   },
   {
     "repository": "DirtyUnicorns/android_device_qcom-common",
     "target_path": "device/qcom/common"
-    "branch":   "lollipop"
+    "branch":   "lollipop-caf"
   }
 ]
