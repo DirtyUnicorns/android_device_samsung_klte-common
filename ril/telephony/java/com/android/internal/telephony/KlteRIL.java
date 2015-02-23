@@ -38,6 +38,8 @@ public class KlteRIL extends RIL {
 
     private static final int RIL_REQUEST_DIAL_EMERGENCY = 10016;
 
+    private boolean mIsGsm = false;
+
     public KlteRIL(Context context, int networkMode, int cdmaSubscription) {
         super(context, networkMode, cdmaSubscription, null);
         mQANElements = 6;
@@ -181,10 +183,12 @@ public class KlteRIL extends RIL {
             dc.als = p.readInt();
             voiceSettings = p.readInt();
             dc.isVoice = (0 != voiceSettings);
-            boolean isVideo = (0 != p.readInt());   // Samsung CallDetails
-            int call_type = p.readInt();            // Samsung CallDetails
-            int call_domain = p.readInt();          // Samsung CallDetails
-            String csv = p.readString();            // Samsung CallDetails
+            if (mIsGsm) {
+                boolean isVideo = (0 != p.readInt());   // Samsung CallDetails
+                int call_type = p.readInt();            // Samsung CallDetails
+                int call_domain = p.readInt();          // Samsung CallDetails
+                String csv = p.readString();            // Samsung CallDetails
+            }
             dc.isVoicePrivacy = (0 != p.readInt());
             dc.number = p.readString();
             int np = p.readInt();
@@ -253,7 +257,6 @@ public class KlteRIL extends RIL {
         int lteCqi = p.readInt();
         int tdScdmaRscp = p.readInt();
         // constructor sets default true, makeSignalStrengthFromRilParcel does not set it
-        boolean isGsm = true;
 
         if ((lteSignalStrength & 0xff) == 255 || lteSignalStrength == 99) {
             lteSignalStrength = 99;
@@ -271,11 +274,17 @@ public class KlteRIL extends RIL {
                     " evdoEcio: " + evdoEcio + " evdoSnr:" + evdoSnr +
                     " lteSignalStrength:" + lteSignalStrength + " lteRsrp:" + lteRsrp +
                     " lteRsrq:" + lteRsrq + " lteRssnr:" + lteRssnr + " lteCqi:" + lteCqi +
-                    " tdScdmaRscp:" + tdScdmaRscp + " isGsm:" + (isGsm ? "true" : "false"));
+                    " tdScdmaRscp:" + tdScdmaRscp + " isGsm:" + (mIsGsm ? "true" : "false"));
 
         return new SignalStrength(gsmSignalStrength, gsmBitErrorRate, cdmaDbm, cdmaEcio, evdoDbm,
                 evdoEcio, evdoSnr, lteSignalStrength, lteRsrp, lteRsrq, lteRssnr, lteCqi,
-                tdScdmaRscp, isGsm);
+                tdScdmaRscp, mIsGsm);
+    }
+
+    @Override
+    public void setPhoneType(int phoneType) {
+        super.setPhoneType(phoneType);
+        mIsGsm = (phoneType != RILConstants.CDMA_PHONE);
     }
 
     private void
